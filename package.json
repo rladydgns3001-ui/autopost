@@ -1,0 +1,13 @@
+{
+  "name": "auto-post",
+  "version": "1.0.0",
+  "description": "GitHub Actions를 이용한 워드프레스 자동 포스팅",
+  "main": "post.js",
+  "scripts": {
+    "post": "node post.js",
+    "test": "echo \"Test completed\""
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.24.0"
+  }
+}
