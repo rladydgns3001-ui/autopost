@@ -246,10 +246,16 @@ async function generateContent(keyword, analysis, imageData) {
 - 개인 경험 포함 ("제가 직접 써보니", "솔직히 말하면")
 - AI가 쓴 티가 나지 않도록 자연스럽게
 
-### 이모지 규칙 (매우 중요!)
-- 이모지는 **절대 사용하지 마세요**
-- H2 제목에도 이모지 넣지 마세요
-- 글 전체에서 이모지 0개
+### 절대 금지 사항 (매우 중요!)
+- 이모지 절대 사용 금지
+- 마크다운 문법 절대 사용 금지: ##, **, *, #, - 등
+- 반드시 HTML 태그만 사용할 것
+
+### HTML 형식 필수
+- 제목(소제목): <h2>제목</h2> 형식 사용 (## 금지)
+- 강조: <strong>텍스트</strong> 형식 사용 (** 금지)
+- 문단: <p>텍스트</p> 형식 사용
+- 목록: <ul><li>항목</li></ul> 형식 사용 (- 금지)
 
 ### 구글 SEO 최적화
 - 제목: 키워드를 앞쪽에 배치, 55자 이내
@@ -257,8 +263,6 @@ async function generateContent(keyword, analysis, imageData) {
 - H2 태그 3-5개, 각 H2에 키워드 자연스럽게 포함
 - 키워드 밀도 1.5-2.5%
 - 메타 설명: 키워드 포함, 150자 이내
-- 내부 링크 유도 문구 1개 포함
-- 강조는 반드시 <strong></strong> HTML 태그 사용 (** 마크다운 절대 금지)
 
 ### 글 구조
 - 도입부: 2-3문장으로 독자 고민 공감
@@ -286,14 +290,15 @@ async function generateContent(keyword, analysis, imageData) {
    - 각 섹션에 구체적인 예시, 숫자, 데이터 포함
    - 결론: 핵심 3줄 요약 + 다음 행동 유도
 
-3. **중요 - 이모지 금지**:
-   - 글 전체에서 이모지를 절대 사용하지 마세요
-   - H2 제목에도 이모지 없이 텍스트만
+3. **절대 금지 - 마크다운 사용 금지**:
+   - ## 사용 금지 → <h2>제목</h2> 사용
+   - ** 사용 금지 → <strong>텍스트</strong> 사용
+   - 이모지 사용 금지
+   - 반드시 순수 HTML만 사용
 
 4. **SEO 요소**:
    - 키워드 자연스럽게 7-10회 포함
-   - 중요 키워드는 <strong> 태그로 강조 (절대 ** 마크다운 사용 금지, 반드시 <strong></strong> HTML 태그 사용)
-   - "관련 글 더보기" 같은 내부 링크 유도 문구 1개
+   - 중요 키워드는 <strong>텍스트</strong> 태그로 강조
 
 5. **1500자 이상 필수**
 
@@ -318,6 +323,18 @@ JSON 형식으로만 응답:
     const jsonMatch = text.match(/\{[\s\S]*\}/);
     if (jsonMatch) {
       const article = JSON.parse(jsonMatch[0]);
+
+      // 마크다운을 HTML로 변환 (후처리)
+      article.content = article.content
+        // ## 제목 → <h2>제목</h2>
+        .replace(/^## (.+)$/gm, '<h2>$1</h2>')
+        .replace(/^### (.+)$/gm, '<h3>$1</h3>')
+        // **텍스트** → <strong>텍스트</strong>
+        .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+        // *텍스트* → <em>텍스트</em>
+        .replace(/\*([^*]+)\*/g, '<em>$1</em>')
+        // - 목록 → <li>
+        .replace(/^- (.+)$/gm, '<li>$1</li>');
 
       // 이미지 플레이스홀더를 실제 이미지로 교체
       if (imageHtml) {
