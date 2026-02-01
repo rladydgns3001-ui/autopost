@@ -8,7 +8,7 @@ const WP_URL = process.env.WP_URL;
 const WP_USER = process.env.WP_USER;
 const WP_APP_PASSWORD = process.env.WP_APP_PASSWORD;
 const SERP_API_KEY = process.env.SERP_API_KEY;
-const UNSPLASH_ACCESS_KEY = process.env.UNSPLASH_ACCESS_KEY; // Unsplash API
+const OPENAI_API_KEY = process.env.OPENAI_API_KEY; // OpenAI DALL-E API
 
 const keywordsPath = path.join(__dirname, "keywords.json");
 
@@ -127,57 +127,59 @@ async function analyzeCompetitors(keyword, searchResults) {
 }
 
 // ============================================
-// 4. Unsplash에서 관련 이미지 검색
+// 4. DALL-E로 이미지 생성
 // ============================================
-async function searchImage(keyword) {
-  console.log(`🖼️ 관련 이미지 검색 중...`);
+async function generateImage(keyword) {
+  console.log(`🖼️ DALL-E로 이미지 생성 중...`);
 
-  // 키워드에서 영어 검색어 추출 (더 나은 결과를 위해)
-  const searchTerms = {
-    "블로그": "blogging writing",
-    "AI": "artificial intelligence technology",
-    "자동화": "automation robot",
-    "워드프레스": "wordpress website",
-    "SEO": "search engine optimization",
-    "글쓰기": "writing content",
-    "수익": "money income",
-    "애드센스": "advertising monetization",
-    "프로그램": "software computer",
-    "포스팅": "blog post content",
+  // 키워드를 영어 프롬프트로 변환
+  const promptMap = {
+    "블로그": "modern blog writing workspace with laptop and coffee, minimalist style",
+    "AI": "artificial intelligence concept, neural network visualization, futuristic blue tones",
+    "자동화": "automation and robotics concept, gears and technology, modern illustration",
+    "워드프레스": "wordpress website design on laptop screen, professional workspace",
+    "SEO": "search engine optimization concept, magnifying glass on search bar, digital marketing",
+    "글쓰기": "creative writing concept, person typing on laptop, warm lighting",
+    "수익": "online business success, growth chart, professional setting",
+    "애드센스": "digital advertising concept, website monetization, modern design",
+    "프로그램": "software development, code on screen, modern tech workspace",
+    "포스팅": "content creation, social media marketing, digital workspace",
   };
 
-  // 키워드에서 영어 검색어 찾기
-  let searchQuery = "blog technology";
-  for (const [korean, english] of Object.entries(searchTerms)) {
+  let imagePrompt = "modern technology blog concept, clean minimalist design, professional";
+  for (const [korean, english] of Object.entries(promptMap)) {
     if (keyword.includes(korean)) {
-      searchQuery = english;
+      imagePrompt = english;
       break;
     }
   }
 
   try {
-    const response = await fetch(
-      `https://api.unsplash.com/search/photos?query=${encodeURIComponent(searchQuery)}&per_page=1&orientation=landscape`,
-      {
-        headers: {
-          Authorization: `Client-ID ${UNSPLASH_ACCESS_KEY}`,
-        },
-      }
-    );
+    const response = await fetch("https://api.openai.com/v1/images/generations", {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${OPENAI_API_KEY}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        model: "dall-e-3",
+        prompt: imagePrompt + ", high quality, 16:9 aspect ratio, no text",
+        n: 1,
+        size: "1792x1024",
+        quality: "standard",
+      }),
+    });
 
     const data = await response.json();
 
-    if (data.results && data.results.length > 0) {
-      const photo = data.results[0];
+    if (data.data && data.data.length > 0) {
       return {
-        url: photo.urls.regular,
-        alt: photo.alt_description || keyword,
-        credit: photo.user.name,
-        creditLink: photo.user.links.html,
+        url: data.data[0].url,
+        alt: keyword,
       };
     }
   } catch (e) {
-    console.log("⚠️ 이미지 검색 실패:", e.message);
+    console.log("⚠️ 이미지 생성 실패:", e.message);
   }
 
   return null;
@@ -232,7 +234,6 @@ async function generateContent(keyword, analysis, imageData) {
     imageHtml = `
 <figure class="wp-block-image size-large">
   <img src="${imageData.url}" alt="${keyword}" />
-  <figcaption>Photo by <a href="${imageData.creditLink}" target="_blank">${imageData.credit}</a> on Unsplash</figcaption>
 </figure>`;
   }
 
@@ -257,6 +258,7 @@ async function generateContent(keyword, analysis, imageData) {
 - 키워드 밀도 1.5-2.5%
 - 메타 설명: 키워드 포함, 150자 이내
 - 내부 링크 유도 문구 1개 포함
+- 강조는 반드시 <strong></strong> HTML 태그 사용 (** 마크다운 절대 금지)
 
 ### 글 구조
 - 도입부: 2-3문장으로 독자 고민 공감
@@ -290,7 +292,7 @@ async function generateContent(keyword, analysis, imageData) {
 
 4. **SEO 요소**:
    - 키워드 자연스럽게 7-10회 포함
-   - 중요 키워드는 <strong> 태그로 강조
+   - 중요 키워드는 <strong> 태그로 강조 (절대 ** 마크다운 사용 금지, 반드시 <strong></strong> HTML 태그 사용)
    - "관련 글 더보기" 같은 내부 링크 유도 문구 1개
 
 5. **1500자 이상 필수**
@@ -405,7 +407,7 @@ async function main() {
   let imageData = null;
   let featuredImageId = null;
 
-  const image = await searchImage(keyword);
+  const image = await generateImage(keyword);
   if (image) {
     const uploaded = await uploadImageToWordPress(
       image.url,
@@ -414,8 +416,8 @@ async function main() {
     if (uploaded) {
       imageData = {
         url: uploaded.url,
-        credit: image.credit,
-        creditLink: image.creditLink,
+        credit: "AI Generated",
+        creditLink: "#",
       };
       featuredImageId = uploaded.id;
     }
