@@ -411,7 +411,7 @@ async function main() {
   if (image) {
     const uploaded = await uploadImageToWordPress(
       image.url,
-      `${keyword.replace(/\s+/g, "-")}-${Date.now()}`
+      `blog-image-${Date.now()}`
     );
     if (uploaded) {
       imageData = {
