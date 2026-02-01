@@ -1,0 +1,792 @@
+<style>
+    .ap-wrapper * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    .ap-wrapper {
+        font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, sans-serif;
+        line-height: 1.6;
+        color: #333;
+        max-width: 100%;
+        overflow-x: hidden;
+    }
+
+    .ap-hero {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 100px 20px;
+        text-align: center;
+        min-height: 95vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .ap-hero::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="1" fill="%23ffffff10"/></svg>') repeat;
+        background-size: 50px 50px;
+        opacity: 0.5;
+    }
+
+    .ap-hero-content {
+        position: relative;
+        z-index: 1;
+        max-width: 900px;
+    }
+
+    .ap-hero-badge {
+        background: rgba(255, 255, 255, 0.2);
+        padding: 10px 25px;
+        border-radius: 50px;
+        font-size: 14px;
+        font-weight: 700;
+        margin-bottom: 30px;
+        display: inline-block;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .ap-hero h1 {
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin-bottom: 25px;
+        line-height: 1.2;
+    }
+
+    .ap-hero h1 span {
+        color: #ffd93d;
+    }
+
+    .ap-hero p {
+        font-size: 1.4rem;
+        opacity: 0.9;
+        max-width: 700px;
+        margin: 0 auto 20px;
+    }
+
+    .ap-hero-highlight {
+        background: rgba(255, 255, 255, 0.15);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        padding: 15px 30px;
+        border-radius: 10px;
+        margin: 30px 0;
+        font-size: 1.1rem;
+    }
+
+    .ap-hero-buttons {
+        display: flex;
+        gap: 15px;
+        flex-wrap: wrap;
+        justify-content: center;
+        margin-top: 40px;
+    }
+
+    .ap-btn {
+        padding: 18px 45px;
+        border-radius: 50px;
+        font-size: 1.1rem;
+        font-weight: 700;
+        text-decoration: none;
+        transition: all 0.3s;
+        cursor: pointer;
+        border: none;
+        display: inline-block;
+    }
+
+    .ap-btn-primary {
+        background: #fff;
+        color: #667eea;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .ap-btn-primary:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+        color: #667eea;
+    }
+
+    .ap-btn-secondary {
+        background: transparent;
+        color: #fff;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .ap-btn-secondary:hover {
+        background: rgba(255, 255, 255, 0.1);
+        color: #fff;
+    }
+
+    .ap-value-section {
+        background: #f8f9fa;
+        padding: 80px 20px;
+    }
+
+    .ap-container {
+        max-width: 1100px;
+        margin: 0 auto;
+    }
+
+    .ap-section-title {
+        text-align: center;
+        font-size: 2.5rem;
+        font-weight: 900;
+        margin-bottom: 20px;
+    }
+
+    .ap-section-title span {
+        color: #667eea;
+    }
+
+    .ap-section-subtitle {
+        text-align: center;
+        color: #666;
+        font-size: 1.2rem;
+        margin-bottom: 50px;
+    }
+
+    .ap-comparison-table {
+        background: white;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+    }
+
+    .ap-comparison-table table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .ap-comparison-table th,
+    .ap-comparison-table td {
+        padding: 20px 25px;
+        text-align: center;
+        border-bottom: 1px solid #eee;
+    }
+
+    .ap-comparison-table th {
+        background: #667eea;
+        color: white;
+        font-size: 1.1rem;
+    }
+
+    .ap-comparison-table th:last-child {
+        background: linear-gradient(90deg, #667eea, #764ba2);
+    }
+
+    .ap-comparison-table tr:last-child td {
+        border-bottom: none;
+        font-weight: 700;
+        font-size: 1.2rem;
+    }
+
+    .ap-highlight {
+        background: #f0f0ff;
+    }
+
+    .ap-price-win {
+        color: #667eea;
+        font-weight: 700;
+    }
+
+    .ap-features {
+        padding: 100px 20px;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .ap-features-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 30px;
+    }
+
+    .ap-feature-card {
+        background: #f8f9fa;
+        padding: 40px;
+        border-radius: 20px;
+        text-align: center;
+        transition: all 0.3s;
+        border: 2px solid transparent;
+    }
+
+    .ap-feature-card:hover {
+        transform: translateY(-5px);
+        border-color: #667eea;
+        box-shadow: 0 20px 40px rgba(102, 126, 234, 0.2);
+    }
+
+    .ap-feature-icon {
+        font-size: 3rem;
+        margin-bottom: 20px;
+    }
+
+    .ap-feature-card h3 {
+        font-size: 1.4rem;
+        margin-bottom: 15px;
+        color: #333;
+    }
+
+    .ap-feature-card p {
+        color: #666;
+        font-size: 1rem;
+    }
+
+    .ap-how-it-works {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 100px 20px;
+    }
+
+    .ap-how-it-works .ap-section-title {
+        color: white;
+    }
+
+    .ap-how-it-works .ap-section-title span {
+        color: #ffd93d;
+    }
+
+    .ap-how-it-works .ap-section-subtitle {
+        color: rgba(255,255,255,0.8);
+    }
+
+    .ap-steps {
+        max-width: 800px;
+        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        gap: 25px;
+    }
+
+    .ap-step {
+        display: flex;
+        align-items: center;
+        gap: 25px;
+        background: rgba(255, 255, 255, 0.05);
+        padding: 30px;
+        border-radius: 15px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .ap-step-number {
+        width: 60px;
+        height: 60px;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        font-weight: 900;
+        flex-shrink: 0;
+    }
+
+    .ap-step-content h3 {
+        font-size: 1.2rem;
+        margin-bottom: 5px;
+    }
+
+    .ap-step-content p {
+        opacity: 0.8;
+        font-size: 0.95rem;
+    }
+
+    .ap-pricing {
+        padding: 100px 20px;
+        text-align: center;
+        background: #f8f9fa;
+    }
+
+    .ap-price-card {
+        max-width: 550px;
+        margin: 0 auto;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 60px 50px;
+        border-radius: 30px;
+        box-shadow: 0 30px 80px rgba(102, 126, 234, 0.4);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .ap-price-card::before {
+        content: '평생 소유';
+        position: absolute;
+        top: 30px;
+        right: -35px;
+        background: #ffd93d;
+        color: #333;
+        padding: 8px 50px;
+        font-size: 12px;
+        font-weight: 700;
+        transform: rotate(45deg);
+    }
+
+    .ap-price-card h3 {
+        font-size: 1.3rem;
+        margin-bottom: 10px;
+        opacity: 0.9;
+    }
+
+    .ap-price-label {
+        font-size: 1rem;
+        opacity: 0.7;
+        margin-bottom: 10px;
+    }
+
+    .ap-price {
+        font-size: 4.5rem;
+        font-weight: 900;
+        margin-bottom: 5px;
+        color: #ffd93d;
+    }
+
+    .ap-price span {
+        font-size: 1.5rem;
+    }
+
+    .ap-price-note {
+        opacity: 0.7;
+        margin-bottom: 35px;
+        font-size: 1.1rem;
+    }
+
+    .ap-price-features {
+        text-align: left;
+        margin-bottom: 40px;
+        list-style: none;
+    }
+
+    .ap-price-features li {
+        padding: 12px 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-size: 1rem;
+    }
+
+    .ap-price-features li:last-child {
+        border-bottom: none;
+    }
+
+    .ap-check {
+        color: #ffd93d;
+        font-size: 1.2rem;
+    }
+
+    .ap-btn-buy {
+        background: #fff;
+        color: #667eea;
+        width: 100%;
+        font-size: 1.3rem;
+        padding: 20px;
+    }
+
+    .ap-btn-buy:hover {
+        color: #667eea;
+    }
+
+    .ap-guarantee {
+        padding: 60px 20px;
+        background: white;
+    }
+
+    .ap-guarantee-box {
+        max-width: 700px;
+        margin: 0 auto;
+        text-align: center;
+        padding: 40px;
+        border: 2px solid #667eea;
+        border-radius: 20px;
+    }
+
+    .ap-guarantee-box h3 {
+        font-size: 1.5rem;
+        margin-bottom: 15px;
+        color: #333;
+    }
+
+    .ap-guarantee-box p {
+        color: #666;
+        font-size: 1rem;
+    }
+
+    .ap-faq {
+        background: #f8f9fa;
+        padding: 100px 20px;
+    }
+
+    .ap-faq-list {
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    .ap-faq-item {
+        background: white;
+        margin-bottom: 15px;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+    }
+
+    .ap-faq-question {
+        padding: 25px 30px;
+        font-weight: 700;
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 1.05rem;
+    }
+
+    .ap-faq-question:hover {
+        background: #f8f9fa;
+    }
+
+    .ap-faq-answer {
+        padding: 0 30px 25px;
+        color: #666;
+        display: none;
+        line-height: 1.8;
+    }
+
+    .ap-faq-item.active .ap-faq-answer {
+        display: block;
+    }
+
+    .ap-cta {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 100px 20px;
+        text-align: center;
+    }
+
+    .ap-cta h2 {
+        font-size: 2.5rem;
+        margin-bottom: 20px;
+    }
+
+    .ap-cta p {
+        font-size: 1.2rem;
+        opacity: 0.9;
+        margin-bottom: 40px;
+    }
+
+    .ap-footer {
+        background: #4a3a7a;
+        color: rgba(255, 255, 255, 0.7);
+        padding: 40px 20px;
+        text-align: center;
+    }
+
+    .ap-footer a {
+        color: #ffd93d;
+        text-decoration: none;
+    }
+
+    @media (max-width: 768px) {
+        .ap-hero h1 {
+            font-size: 2.2rem;
+        }
+
+        .ap-hero p {
+            font-size: 1.1rem;
+        }
+
+        .ap-section-title {
+            font-size: 1.8rem;
+        }
+
+        .ap-step {
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .ap-price {
+            font-size: 3rem;
+        }
+
+        .ap-comparison-table {
+            overflow-x: auto;
+        }
+
+        .ap-comparison-table th,
+        .ap-comparison-table td {
+            padding: 15px;
+            font-size: 0.9rem;
+        }
+    }
+</style>
+
+<div class="ap-wrapper">
+    <!-- Hero Section -->
+    <section class="ap-hero">
+        <div class="ap-hero-content">
+            <div class="ap-hero-badge">AI 자동화 솔루션</div>
+            <h1>블로그 글쓰기,<br><span>AI가 대신합니다</span></h1>
+            <p>키워드 하나로 SEO 최적화된 고품질 블로그 글 작성부터<br>워드프레스 자동 발행까지. 월정액 없이 평생 내 것.</p>
+            <div class="ap-hero-highlight">
+                월 10만원 x 12개월 = <strong>120만원/년</strong> vs <strong>129만원 한 번 = 평생 소유</strong>
+            </div>
+            <div class="ap-hero-buttons">
+                <a href="#ap-pricing" class="ap-btn ap-btn-primary">지금 구매하기</a>
+                <a href="#ap-features" class="ap-btn ap-btn-secondary">기능 살펴보기</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Comparison Section -->
+    <section class="ap-value-section">
+        <div class="ap-container">
+            <h2 class="ap-section-title">월정액 vs <span>평생 소유</span></h2>
+            <p class="ap-section-subtitle">3년만 사용해도 200만원 이상 절약됩니다</p>
+
+            <div class="ap-comparison-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>비교 항목</th>
+                            <th>월정액 서비스</th>
+                            <th>AutoPost (평생소유)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1년 비용</td>
+                            <td>120만원</td>
+                            <td class="ap-highlight">129만원</td>
+                        </tr>
+                        <tr>
+                            <td>3년 비용</td>
+                            <td>360만원</td>
+                            <td class="ap-highlight">129만원</td>
+                        </tr>
+                        <tr>
+                            <td>5년 비용</td>
+                            <td>600만원</td>
+                            <td class="ap-highlight">129만원</td>
+                        </tr>
+                        <tr>
+                            <td>소유권</td>
+                            <td>해지시 사용 불가</td>
+                            <td class="ap-highlight">평생 내 것</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2"></td>
+                            <td class="ap-highlight"><span class="ap-price-win">총 절약 금액 (5년)<br>471만원 절약</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="ap-features" id="ap-features">
+        <h2 class="ap-section-title">왜 <span>AutoPost</span>인가요?</h2>
+        <p class="ap-section-subtitle">단순 글쓰기가 아닌, 수익화를 위한 완벽한 솔루션</p>
+
+        <div class="ap-features-grid">
+            <div class="ap-feature-card">
+                <div class="ap-feature-icon">🤖</div>
+                <h3>Claude AI 최신 모델</h3>
+                <p>GPT보다 자연스러운 Claude 최신 모델로 사람이 쓴 것 같은 고품질 글을 생성합니다.</p>
+            </div>
+
+            <div class="ap-feature-card">
+                <div class="ap-feature-icon">📈</div>
+                <h3>구글 SEO 완벽 최적화</h3>
+                <p>메타 설명, H 태그 구조, 키워드 배치까지 검색 상위 노출을 위한 모든 요소가 자동 적용됩니다.</p>
+            </div>
+
+            <div class="ap-feature-card">
+                <div class="ap-feature-icon">💰</div>
+                <h3>애드센스 자동 삽입</h3>
+                <p>내 애드센스 광고 코드가 최적의 위치에 자동 삽입되어 즉시 수익화가 가능합니다.</p>
+            </div>
+
+            <div class="ap-feature-card">
+                <div class="ap-feature-icon">⚡</div>
+                <h3>원클릭 자동 발행</h3>
+                <p>키워드만 입력하면 글 작성부터 워드프레스 발행까지 모든 과정이 자동으로 완료됩니다.</p>
+            </div>
+
+            <div class="ap-feature-card">
+                <div class="ap-feature-icon">🔐</div>
+                <h3>내 API 키 사용</h3>
+                <p>월정액 없이 내 Claude API 키를 사용해서 원하는 만큼 무제한으로 글을 생성할 수 있습니다.</p>
+            </div>
+
+            <div class="ap-feature-card">
+                <div class="ap-feature-icon">🖥️</div>
+                <h3>데스크톱 앱 제공</h3>
+                <p>Windows, Mac 모두 지원하는 전용 프로그램으로 복잡한 설정 없이 바로 사용 가능합니다.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="ap-how-it-works">
+        <div class="ap-container">
+            <h2 class="ap-section-title">이렇게 <span>간단합니다</span></h2>
+            <p class="ap-section-subtitle">복잡한 설정 없이 4단계면 끝</p>
+
+            <div class="ap-steps">
+                <div class="ap-step">
+                    <div class="ap-step-number">1</div>
+                    <div class="ap-step-content">
+                        <h3>프로그램 설치 & 설정</h3>
+                        <p>제공된 프로그램 설치 후 Claude API 키와 워드프레스 정보를 입력합니다. (1:1 원격 지원)</p>
+                    </div>
+                </div>
+
+                <div class="ap-step">
+                    <div class="ap-step-number">2</div>
+                    <div class="ap-step-content">
+                        <h3>키워드 입력</h3>
+                        <p>글을 작성할 키워드를 입력합니다. 예: "2024 월배당 ETF 추천"</p>
+                    </div>
+                </div>
+
+                <div class="ap-step">
+                    <div class="ap-step-number">3</div>
+                    <div class="ap-step-content">
+                        <h3>AI가 글 작성</h3>
+                        <p>AI가 웹에서 최신 정보를 검색하고 SEO 최적화된 글을 자동으로 작성합니다.</p>
+                    </div>
+                </div>
+
+                <div class="ap-step">
+                    <div class="ap-step-number">4</div>
+                    <div class="ap-step-content">
+                        <h3>워드프레스 자동 발행</h3>
+                        <p>작성된 글이 애드센스 코드와 함께 내 블로그에 자동으로 발행됩니다.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section class="ap-pricing" id="ap-pricing">
+        <div class="ap-container">
+            <h2 class="ap-section-title">프리미엄 패키지</h2>
+            <p class="ap-section-subtitle">월정액 없이 한 번 구매로 평생 사용</p>
+
+            <div class="ap-price-card">
+                <h3>AutoPost SEO Writer</h3>
+                <p class="ap-price-label">평생 소유 라이선스</p>
+                <div class="ap-price">1,290,000<span>원</span></div>
+                <p class="ap-price-note">일회성 결제 / 추가 비용 없음</p>
+
+                <ul class="ap-price-features">
+                    <li><span class="ap-check">✓</span> AutoPost SEO Writer 프로그램 (평생 소유)</li>
+                    <li><span class="ap-check">✓</span> Windows + Mac 버전 모두 제공</li>
+                    <li><span class="ap-check">✓</span> 1:1 줌 원격 설치 지원 (30분)</li>
+                    <li><span class="ap-check">✓</span> 프로그램 사용법 교육 (30분)</li>
+                    <li><span class="ap-check">✓</span> Claude API 발급 완벽 가이드</li>
+                    <li><span class="ap-check">✓</span> 워드프레스 세팅 가이드</li>
+                    <li><span class="ap-check">✓</span> 수익화 키워드 30개 제공</li>
+                    <li><span class="ap-check">✓</span> SEO 글쓰기 노하우 PDF</li>
+                    <li><span class="ap-check">✓</span> 평생 무료 업데이트</li>
+                    <li><span class="ap-check">✓</span> 카카오톡 1:1 지원</li>
+                </ul>
+
+                <a href="https://open.kakao.com/o/sjcFzkei" class="ap-btn ap-btn-buy">구매 문의하기</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Guarantee -->
+    <section class="ap-guarantee">
+        <div class="ap-guarantee-box">
+            <h3>구매 전 충분한 상담을 약속드립니다</h3>
+            <p>구매 전 카카오톡으로 궁금한 점을 모두 물어보세요. 데모 영상과 상세한 설명을 통해 충분히 이해하신 후 결정하실 수 있습니다.</p>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="ap-faq">
+        <div class="ap-container">
+            <h2 class="ap-section-title">자주 묻는 <span>질문</span></h2>
+
+            <div class="ap-faq-list">
+                <div class="ap-faq-item">
+                    <div class="ap-faq-question" onclick="this.parentElement.classList.toggle('active')">
+                        <span>API 비용은 별도인가요?</span>
+                        <span>▼</span>
+                    </div>
+                    <div class="ap-faq-answer">
+                        네, Claude API 사용료는 별도입니다. 하지만 걱정하지 마세요! 글 1개당 약 50~100원 수준으로 매우 저렴합니다. 하루 10개 글을 써도 월 3만원 이하입니다.
+                    </div>
+                </div>
+
+                <div class="ap-faq-item">
+                    <div class="ap-faq-question" onclick="this.parentElement.classList.toggle('active')">
+                        <span>컴퓨터를 잘 못해도 사용할 수 있나요?</span>
+                        <span>▼</span>
+                    </div>
+                    <div class="ap-faq-answer">
+                        네, 전혀 걱정하지 않으셔도 됩니다. 1:1 줌 원격 접속으로 직접 설치해드리고, 사용법도 교육해드립니다.
+                    </div>
+                </div>
+
+                <div class="ap-faq-item">
+                    <div class="ap-faq-question" onclick="this.parentElement.classList.toggle('active')">
+                        <span>워드프레스 외 다른 블로그도 지원하나요?</span>
+                        <span>▼</span>
+                    </div>
+                    <div class="ap-faq-answer">
+                        현재는 워드프레스(WordPress)만 지원합니다. 티스토리, 네이버 블로그 등은 추후 업데이트 예정이며, 업데이트 시 무료로 제공됩니다.
+                    </div>
+                </div>
+
+                <div class="ap-faq-item">
+                    <div class="ap-faq-question" onclick="this.parentElement.classList.toggle('active')">
+                        <span>글 품질이 좋은가요?</span>
+                        <span>▼</span>
+                    </div>
+                    <div class="ap-faq-answer">
+                        Claude AI의 최신 모델을 사용하여 사람이 쓴 것과 구분이 어려운 자연스러운 글을 생성합니다. SEO 구조까지 자동으로 포함됩니다.
+                    </div>
+                </div>
+
+                <div class="ap-faq-item">
+                    <div class="ap-faq-question" onclick="this.parentElement.classList.toggle('active')">
+                        <span>환불이 가능한가요?</span>
+                        <span>▼</span>
+                    </div>
+                    <div class="ap-faq-answer">
+                        디지털 프로그램 특성상 구매 후 환불은 어렵습니다. 구매 전 충분히 상담해드리고, 데모 영상을 통해 기능을 확인하신 후 결정하실 수 있습니다.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="ap-cta">
+        <div class="ap-container">
+            <h2>지금 바로 시작하세요</h2>
+            <p>블로그 글쓰기에 들이는 시간을 90% 줄이고, 수익은 극대화하세요.</p>
+            <a href="https://open.kakao.com/o/sjcFzkei" class="ap-btn ap-btn-primary">카카오톡 문의하기</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="ap-footer">
+        <p>AutoPost SEO Writer © 2025. All rights reserved.</p>
+        <p>문의: <a href="https://open.kakao.com/o/sjcFzkei">카카오톡 오픈채팅</a></p>
+    </footer>
+</div>
