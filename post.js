@@ -268,7 +268,9 @@ async function generateContent(keyword, analysis, imageData) {
 - 도입부: 2-3문장으로 독자 고민 공감
 - [IMAGE_PLACEHOLDER] 태그를 도입부 바로 다음에 삽입
 - 본론: H2 섹션 3-5개
+- 본문 중간에 자연스럽게 "AI 블로그 자동화 프로그램"을 언급하며 내부 링크 삽입
 - 결론: 핵심 요약 + 행동 유도
+- 글 마지막에 [CTA_PLACEHOLDER] 태그 삽입
 - 총 1500자 이상`;
 
   const userPrompt = `다음 키워드로 구글 SEO에 최적화된 블로그 글을 작성해주세요.
@@ -288,7 +290,9 @@ async function generateContent(keyword, analysis, imageData) {
    - [IMAGE_PLACEHOLDER]
    - H2 섹션 3-5개 (각 H2에 키워드 변형 포함)
    - 각 섹션에 구체적인 예시, 숫자, 데이터 포함
+   - 본문 중간에 자연스럽게 내부 링크 삽입: <a href="https://wpauto.kr/">AI 블로그 자동화 프로그램</a> (문맥에 맞게 자연스럽게)
    - 결론: 핵심 3줄 요약 + 다음 행동 유도
+   - 글 마지막에 [CTA_PLACEHOLDER] 태그 삽입
 
 3. **절대 금지 - 마크다운 사용 금지**:
    - ## 사용 금지 → <h2>제목</h2> 사용
@@ -341,6 +345,19 @@ JSON 형식으로만 응답:
         article.content = article.content.replace("[IMAGE_PLACEHOLDER]", imageHtml);
       } else {
         article.content = article.content.replace("[IMAGE_PLACEHOLDER]", "");
+      }
+
+      // CTA 박스 추가 (메인 페이지로 유도)
+      const ctaHtml = `
+<div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 40px; border-radius: 20px; margin: 40px 0; text-align: center;">
+  <h3 style="color: #ffd93d; font-size: 1.5rem; margin-bottom: 15px;">블로그 글쓰기, AI가 대신해드립니다</h3>
+  <p style="color: white; font-size: 1.1rem; margin-bottom: 25px;">키워드 하나로 SEO 최적화 글 작성부터 자동 발행까지!<br>월정액 없이 평생 사용하세요.</p>
+  <a href="https://wpauto.kr/" style="display: inline-block; background: #fff; color: #667eea; padding: 15px 40px; border-radius: 50px; font-weight: 700; text-decoration: none; font-size: 1.1rem;">자세히 알아보기</a>
+</div>`;
+      article.content = article.content.replace("[CTA_PLACEHOLDER]", ctaHtml);
+      // CTA 플레이스홀더가 없는 경우 글 끝에 추가
+      if (!article.content.includes(ctaHtml)) {
+        article.content += ctaHtml;
       }
 
       const contentLength = article.content.replace(/<[^>]+>/g, "").length;
