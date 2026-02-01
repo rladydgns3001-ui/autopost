@@ -349,11 +349,27 @@ JSON 형식으로만 응답:
 
       // CTA 박스 추가 (메인 페이지로 유도)
       const ctaHtml = `
-<div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 40px; border-radius: 20px; margin: 40px 0; text-align: center;">
-  <h3 style="color: #ffd93d; font-size: 1.5rem; margin-bottom: 15px;">블로그 글쓰기, AI가 대신해드립니다</h3>
-  <p style="color: white; font-size: 1.1rem; margin-bottom: 25px;">키워드 하나로 SEO 최적화 글 작성부터 자동 발행까지!<br>월정액 없이 평생 사용하세요.</p>
-  <a href="https://wpauto.kr/" style="display: inline-block; background: #fff; color: #667eea; padding: 15px 40px; border-radius: 50px; font-weight: 700; text-decoration: none; font-size: 1.1rem;">자세히 알아보기</a>
+<div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 50px 40px; border-radius: 20px; margin: 50px 0; text-align: center; box-shadow: 0 20px 60px rgba(102, 126, 234, 0.4);">
+  <p style="color: rgba(255,255,255,0.8); font-size: 0.95rem; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 2px;">AI 블로그 자동화 솔루션</p>
+  <h3 style="color: #fff; font-size: 1.8rem; margin-bottom: 15px; font-weight: 900;">블로그 글쓰기, AI가 대신해드립니다</h3>
+  <p style="color: rgba(255,255,255,0.9); font-size: 1.1rem; margin-bottom: 30px; line-height: 1.7;">키워드 하나로 SEO 최적화 글 작성부터 워드프레스 자동 발행까지!<br><strong style="color: #ffd93d;">월정액 없이 평생 사용</strong>하세요.</p>
+  <a href="https://wpauto.kr/" style="display: inline-block; background: #ffd93d; color: #1a1a2e; padding: 18px 50px; border-radius: 50px; font-weight: 800; text-decoration: none; font-size: 1.15rem; box-shadow: 0 10px 30px rgba(0,0,0,0.3); transition: all 0.3s;">무료 상담받기 →</a>
+  <p style="color: rgba(255,255,255,0.6); font-size: 0.85rem; margin-top: 15px;">지금 바로 카카오톡으로 문의하세요</p>
 </div>`;
+
+      // 본문 중간 링크 버튼 추가
+      const midCtaHtml = `
+<div style="background: #f8f9fa; border: 2px solid #667eea; padding: 25px; border-radius: 15px; margin: 30px 0; text-align: center;">
+  <p style="color: #333; font-size: 1.05rem; margin-bottom: 15px;">💡 <strong>시간 없이 블로그 운영하고 싶다면?</strong></p>
+  <a href="https://wpauto.kr/" style="display: inline-block; background: #667eea; color: #fff; padding: 12px 30px; border-radius: 8px; font-weight: 700; text-decoration: none; font-size: 1rem;">AI 자동화 프로그램 알아보기</a>
+</div>`;
+
+      // 본문 중간에 링크 버튼 삽입 (3번째 H2 태그 앞에)
+      const h2Matches = article.content.match(/<h2[^>]*>/gi);
+      if (h2Matches && h2Matches.length >= 3) {
+        const thirdH2 = h2Matches[2];
+        article.content = article.content.replace(thirdH2, midCtaHtml + thirdH2);
+      }
       article.content = article.content.replace("[CTA_PLACEHOLDER]", ctaHtml);
       // CTA 플레이스홀더가 없는 경우 글 끝에 추가
       if (!article.content.includes(ctaHtml)) {
