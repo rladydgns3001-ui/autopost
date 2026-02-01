@@ -397,7 +397,7 @@ async function postToWordPress(title, content, metaDescription, featuredImageId)
   const postData = {
     title: title,
     content: content,
-    status: "draft",
+    status: "publish",
     excerpt: metaDescription,
     meta: {
       _yoast_wpseo_metadesc: metaDescription,
