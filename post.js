@@ -60,6 +60,11 @@ async function searchGoogle(keyword, options = {}) {
   const data = await response.json();
 
   if (!data.organic_results) {
+    if (!recentOnly) {
+      // 이미 전체 기간 검색인데도 결과가 없으면 빈 배열 반환
+      console.log("⚠️ 검색 결과 없음 - 빈 결과로 진행");
+      return [];
+    }
     console.log("⚠️ 최근 3개월 결과 없음, 전체 기간으로 재검색...");
     // 날짜 필터 없이 재검색
     return searchGoogle(keyword, { recentOnly: false, officialFirst });
