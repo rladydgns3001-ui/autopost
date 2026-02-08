@@ -2,8 +2,7 @@ name: Daily SEO Auto Post
 
 on:
   schedule:
-    - cron: '0 1 * * *'   # 매일 오전 10시 (KST)
-    - cron: '0 5 * * *'   # 매일 오후 2시 (KST)
+    - cron: '0 1 * * *'   # 매일 오전 10시 (KST) - 하루 1회
   workflow_dispatch:
 
 permissions:
